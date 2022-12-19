@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete ,UseGuards} from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { Roles } from '../roles/roles.decorator';
+import { RoleEnum } from '../roles/roles.enum';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../roles/roles.guard';
 
 @Controller('teacher')
 export class TeacherController {
   constructor(private readonly teacherService: TeacherService) {}
 
-  @Post()
-  create(@Body() createTeacherDto: CreateTeacherDto) {
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('create')
+  createTeacher(@Body() createTeacherDto: CreateTeacherDto) {
     return this.teacherService.create(createTeacherDto);
   }
 
-  @Get()
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('all')
   findAll() {
     return this.teacherService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.teacherService.findOne(+id);
+  @ApiBearerAuth()
+  @Roles(RoleEnum.teacher)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('register/off')
+  registerOffClass(){
+    
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTeacherDto: UpdateTeacherDto) {
-    return this.teacherService.update(+id, updateTeacherDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.teacherService.remove(+id);
-  }
 }
