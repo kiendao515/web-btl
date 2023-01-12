@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { Teacher, TeacherDocument } from './entities/teacher.entity';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { LoginDto } from './dto/login.dto';
 @Injectable()
 export class TeacherService {
   constructor(@InjectModel(Teacher.name) private teacher: Model<TeacherDocument>) {}
@@ -37,15 +38,32 @@ export class TeacherService {
       throw new Error(`Error finding ${err} user ${err.message}`);
     }
   }
+  async checkTeacherLogin(@Body() loginDto: LoginDto): Promise<Teacher> {
+    try {
+      const t = await this.teacher.findOne({ email: loginDto.email });
+      if (t) {
+        const isMatch = await bcrypt.compare(loginDto.password, t.password);
+        if (isMatch) {
+          return t;
+        } else {
+          throw new Error(`password is incorrect`);
+        }
+      }else{
+        return null;
+      }
+    } catch (err) {
+      throw new Error(`Error finding ${err} user ${err.message}`);
+    }
+  }
 
   async findAll() {
     const teachers= await this.teacher.find({});
     return teachers;
   }
 
-  // đăng kí nghỉ dạy 
-  async registerOffClass(){
-    
+  // get profile
+  async getProfile(){
+
   }
 
 }

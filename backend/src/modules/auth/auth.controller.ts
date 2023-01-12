@@ -17,8 +17,8 @@ export class AuthController {
   
     @Post('teacher/login')
     @HttpCode(HttpStatus.OK)
-    public teacherLogin() {
-        
+    public teacherLogin(@Body() LoginDto:LoginDto) {
+        return this.authService.checkTeacherLogin(LoginDto);
     }
 
     @Post('department/login')
