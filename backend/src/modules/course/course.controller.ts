@@ -4,20 +4,21 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
 import { RoleEnum } from '../roles/roles.enum';
 import { RolesGuard } from '../roles/roles.guard';
-import { DepartmentService } from './department.service';
-import { CreateDepartmentDto } from './dto/create-department.dto';
-import { UpdateDepartmentDto } from './dto/update-department.dto';
-@ApiTags('Department')
-@Controller('department')
-export class DepartmentController {
-  constructor(private readonly departmentService: DepartmentService) {}
+import { CourseService } from './course.service';
+import { CreateCourseDto } from './dto/create-course.dto';
+import { UpdateCourseDto } from './dto/update-course.dto';
+
+@Controller('course')
+@ApiTags('Course')
+export class CourseController {
+  constructor(private readonly courseService: CourseService) {}
 
   @ApiBearerAuth()
   @Roles(RoleEnum.admin)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Post('create')
-  create(@Body() createDepartmentDto: CreateDepartmentDto) {
-    return this.departmentService.create(createDepartmentDto);
+  create(@Body() createCourseDto: CreateCourseDto) {
+    return this.courseService.create(createCourseDto);
   }
 
   @ApiBearerAuth()
@@ -25,6 +26,7 @@ export class DepartmentController {
   @UseGuards(AuthGuard('jwt'),RolesGuard)
   @Get('all')
   findAll() {
-    return this.departmentService.findAll();
+    return this.courseService.findAll();
   }
+
 }

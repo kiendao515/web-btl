@@ -7,6 +7,8 @@ import { TeacherModule } from './modules/teacher/teacher.module';
 import { DepartmentModule } from './modules/department/department.module';
 import { SectorModule } from './modules/sector/sector.module';
 import { SubjectsModule } from './modules/subjects/subjects.module';
+import { CourseModule } from './modules/course/course.module';
+import { RegistrationModule } from './modules/registration/registration.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb+srv://kiendao:kiendao2001@cluster0.bnqgz.mongodb.net/web-back?retryWrites=true&w=majority'),
@@ -15,7 +17,9 @@ import { SubjectsModule } from './modules/subjects/subjects.module';
     AuthModule,
     DepartmentModule,
     SectorModule,
-    SubjectsModule
+    SubjectsModule,
+    CourseModule,
+    RegistrationModule
   ],
   controllers: [],
   providers: [],

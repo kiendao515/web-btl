@@ -1,6 +1,7 @@
 import { Controller, Post, UseGuards, Get, HttpCode, HttpStatus, Body } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '../department/dto/login.dto';
+import { StudentLoginDto } from '../student/dto/login.dto';
 import { AuthService } from './auth.service';
 import { LoginRequestDTO } from './dto/request/login.dto';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
@@ -25,5 +26,11 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     public departmentLogin(@Body() LoginDto:LoginDto){
       return this.authService.checkDepartmentLogin(LoginDto);
+    }
+
+    @Post('student/login')
+    @HttpCode(HttpStatus.OK)
+    public studentLogin(@Body() LoginDto:StudentLoginDto){
+      return this.authService.checkStudentLogin(LoginDto);
     }
 }

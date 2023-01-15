@@ -7,6 +7,8 @@ import { Body } from '@nestjs/common/decorators';
 import { RoleEnum } from '../roles/roles.enum';
 import { LoginDto } from '../department/dto/login.dto';
 import { DepartmentService } from '../department/department.service';
+import { StudentLoginDto } from '../student/dto/login.dto';
+import { StudentService } from '../student/student.service';
 
 
 @Injectable()
@@ -14,7 +16,8 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private teacherService: TeacherService,
-    private departmentService:DepartmentService
+    private departmentService:DepartmentService,
+    private studentService:StudentService
   ) { }
   async checkAdminLogin(@Body() LoginRequestDTO: LoginRequestDTO): Promise<any> {
     if (LoginRequestDTO.email == "admin@gmail.com" && LoginRequestDTO.password == "admin") {
@@ -60,6 +63,23 @@ export class AuthService {
       }
     }
   }
+
+  async checkStudentLogin(@Body() loginDto: StudentLoginDto): Promise<any> {
+    let s = await this.studentService.checkStudentLogin(loginDto);
+    if(s){
+      const payload ={email:s.email,role:RoleEnum.student}
+      return {
+        student:s,
+        access_token: this.jwtService.sign(payload)
+      }
+    }else{
+      return {
+        status: "200",
+        message: "đăng nhập thất bại"
+      }
+    }
+  }
+
   async validateTeacher(email: string, password: string): Promise<any> {
     return await this.teacherService.findOne(email, password);
   }
