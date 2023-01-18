@@ -11,7 +11,7 @@ export class Subject {
     courseId:string;
 
     @Prop()
-    numberOfCredit:Number;
+    numberOfCredit:number;
 
     @Prop({ 
         type: mongoose.Schema.Types.ObjectId, 

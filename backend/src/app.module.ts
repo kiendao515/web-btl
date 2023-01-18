@@ -9,6 +9,7 @@ import { SectorModule } from './modules/sector/sector.module';
 import { SubjectsModule } from './modules/subjects/subjects.module';
 import { CourseModule } from './modules/course/course.module';
 import { RegistrationModule } from './modules/registration/registration.module';
+import { AddCreditModule } from './modules/add-credit/add-credit.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb+srv://kiendao:kiendao2001@cluster0.bnqgz.mongodb.net/web-back?retryWrites=true&w=majority'),
@@ -19,7 +20,8 @@ import { RegistrationModule } from './modules/registration/registration.module';
     SectorModule,
     SubjectsModule,
     CourseModule,
-    RegistrationModule
+    RegistrationModule,
+    AddCreditModule
   ],
   controllers: [],
   providers: [],

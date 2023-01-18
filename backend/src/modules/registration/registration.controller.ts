@@ -32,7 +32,7 @@ export class RegistrationController {
 
   @ApiBearerAuth()
   @Post('/register')
-  registerCourse(@Request() req,@Body() registration:CreateRegistrationDto){
+  async registerCourse(@Request() req,@Body() registration:CreateRegistrationDto){
     const token = req.headers.authorization?.split(' ')[1];
     const body = req.body;
     if(!token){
@@ -41,8 +41,10 @@ export class RegistrationController {
         message:'token required'
       }
     }else{
-      console.log(body);
-      return this.registrationService.registerCourse(token,body);
+      await this.registrationService.registerCourse(token,body);
+      return {
+        data:"register success!"
+      }
     }
   }
 }

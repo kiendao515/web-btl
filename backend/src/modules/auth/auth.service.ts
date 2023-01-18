@@ -51,7 +51,7 @@ export class AuthService {
   async checkTeacherLogin(@Body() loginDto: LoginDto): Promise<any> {
     let teacher = await this.teacherService.checkTeacherLogin(loginDto);
     if(teacher){
-      const payload ={email:teacher.email,role:RoleEnum.department}
+      const payload ={email:teacher.email,role:RoleEnum.teacher}
       return {
         teacher:teacher,
         access_token: this.jwtService.sign(payload)

@@ -29,7 +29,7 @@ export class CreateSubjectDto {
         example: 4,
       })
       @IsNotEmpty()
-      numberOfCredit: Number;
+      numberOfCredit: number;
     
       @ApiProperty({
         type: Sector,

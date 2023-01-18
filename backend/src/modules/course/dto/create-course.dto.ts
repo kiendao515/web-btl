@@ -15,14 +15,14 @@ export class CreateCourseDto {
         example: '2022-12-31',
       })
       @IsNotEmpty()
-      startDate: Date;
+      startDate: string;
 
       @ApiProperty({
         type: String,
         example: '2023-01-20',
       })
       @IsNotEmpty()
-      closeDate: Date;
+      closeDate: string;
 
 
 }

@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Date, HydratedDocument } from "mongoose";
+import { HydratedDocument } from "mongoose";
 export type CourseDocument = HydratedDocument<Course>;
 @Schema()
 export class Course {
@@ -7,10 +7,10 @@ export class Course {
     semester: string;
   
     @Prop()
-    startDate:Date
+    startDate:string;
 
     @Prop()
-    closeDate : Date;
+    closeDate : string;
 }
 export const CourseSchema = SchemaFactory.createForClass(Course);
 
