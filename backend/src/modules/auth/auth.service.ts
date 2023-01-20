@@ -45,6 +45,21 @@ export class AuthService {
       }
     }
   }
+  async checkTeacherLogin(@Body() loginDto: LoginDto): Promise<any> {
+    let teacher = await this.teacherService.checkTeacherLogin(loginDto);
+    if(teacher){
+      const payload ={email:teacher.email,role:RoleEnum.department}
+      return {
+        teacher:teacher,
+        access_token: this.jwtService.sign(payload)
+      }
+    }else{
+      return {
+        status: "200",
+        message: "đăng nhập thất bại"
+      }
+    }
+  }
   async validateTeacher(email: string, password: string): Promise<any> {
     return await this.teacherService.findOne(email, password);
   }

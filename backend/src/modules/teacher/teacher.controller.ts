@@ -31,8 +31,8 @@ export class TeacherController {
   @ApiBearerAuth()
   @Roles(RoleEnum.teacher)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Post('register/off')
-  registerOffClass(){
+  @Get('profile')
+  getProfile(){
     
   }
 
