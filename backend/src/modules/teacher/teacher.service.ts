@@ -7,8 +7,10 @@ import { Model } from 'mongoose';
 import { LoginDto } from './dto/login.dto';
 @Injectable()
 export class TeacherService {
-  constructor(@InjectModel(Teacher.name) private teacher: Model<TeacherDocument>) {}
-  async create(createTeacherDto: CreateTeacherDto) :Promise<Teacher> {
+  constructor(
+    @InjectModel(Teacher.name) private teacher: Model<TeacherDocument>,
+  ) {}
+  async create(createTeacherDto: CreateTeacherDto): Promise<Teacher> {
     try {
       const teacher = new Teacher();
       const hashPassword = await bcrypt.hash(createTeacherDto.password, 10);
@@ -16,8 +18,8 @@ export class TeacherService {
       teacher.name = createTeacherDto.name;
       teacher.password = hashPassword;
       teacher.teacherIdentity = createTeacherDto.teacherID;
-      teacher.userImage= createTeacherDto.userImage;
-      teacher.identification= createTeacherDto.identification;
+      teacher.userImage = createTeacherDto.userImage;
+      teacher.identification = createTeacherDto.identification;
       return new this.teacher(teacher).save();
     } catch (err) {
       throw new Error(`Error creating ${err} user ${err.message}`);
@@ -48,7 +50,7 @@ export class TeacherService {
         } else {
           throw new Error(`password is incorrect`);
         }
-      }else{
+      } else {
         return null;
       }
     } catch (err) {
@@ -57,13 +59,10 @@ export class TeacherService {
   }
 
   async findAll() {
-    const teachers= await this.teacher.find({});
+    const teachers = await this.teacher.find({});
     return teachers;
   }
 
   // get profile
-  async getProfile(){
-
-  }
-
+  async getProfile() {}
 }

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
@@ -22,14 +31,17 @@ export class DepartmentController {
 
   @ApiBearerAuth()
   @Roles(RoleEnum.admin)
-  @UseGuards(AuthGuard('jwt'),RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('all')
   findAll() {
     return this.departmentService.findAll();
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDepartmentDto: UpdateDepartmentDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDepartmentDto: UpdateDepartmentDto,
+  ) {
     return this.departmentService.update(+id, updateDepartmentDto);
   }
 

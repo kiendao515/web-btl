@@ -6,17 +6,19 @@ import { Sector, SectorDocument } from './entities/sector.entity';
 
 @Injectable()
 export class SectorService {
-    constructor(@InjectModel(Sector.name) private sector: Model<SectorDocument>) {}
-    async create(createSectorDto: CreateSectorDto):Promise<Sector> {
-        try {
-          const sector = new Sector();
-          sector.sectorName= createSectorDto.sectorName;
-          return new this.sector(sector).save();
-        } catch (error) {
-          throw new Error(`Error create sector ${error}`);
-        }
+  constructor(
+    @InjectModel(Sector.name) private sector: Model<SectorDocument>,
+  ) {}
+  async create(createSectorDto: CreateSectorDto): Promise<Sector> {
+    try {
+      const sector = new Sector();
+      sector.sectorName = createSectorDto.sectorName;
+      return new this.sector(sector).save();
+    } catch (error) {
+      throw new Error(`Error create sector ${error}`);
     }
-    async getAllSector():Promise<any>{
-      return this.sector.find({});
-    }
+  }
+  async getAllSector(): Promise<any> {
+    return this.sector.find({});
+  }
 }

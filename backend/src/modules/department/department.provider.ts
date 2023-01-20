@@ -1,5 +1,5 @@
 import { Mongoose } from 'mongoose';
-import {DepartmentSchema } from './entities/department.entity';
+import { DepartmentSchema } from './entities/department.entity';
 
 export const catsProviders = [
   {

@@ -20,7 +20,7 @@ export class Student {
 
   @Prop()
   @ApiProperty()
-  student_code : number;
+  student_code: number;
 
   @Prop()
   @ApiProperty()
@@ -28,12 +28,11 @@ export class Student {
 
   @Prop()
   @ApiProperty()
-  password:string;
+  password: string;
 
   @Prop()
   @ApiProperty()
-  total_credits:number;
-
+  total_credits: number;
 }
 
 export const UserSchema = SchemaFactory.createForClass(Student);

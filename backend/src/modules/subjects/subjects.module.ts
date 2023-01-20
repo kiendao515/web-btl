@@ -6,9 +6,9 @@ import { SubjectsService } from './subjects.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Subject.name, schema: SubjectSchema }])
+    MongooseModule.forFeature([{ name: Subject.name, schema: SubjectSchema }]),
   ],
   controllers: [SubjectsController],
-  providers: [SubjectsService]
+  providers: [SubjectsService],
 })
 export class SubjectsModule {}

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete ,UseGuards} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
@@ -32,8 +41,5 @@ export class TeacherController {
   @Roles(RoleEnum.teacher)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('profile')
-  getProfile(){
-    
-  }
-
+  getProfile() {}
 }

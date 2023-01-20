@@ -9,13 +9,15 @@ import { SectorModule } from './modules/sector/sector.module';
 import { SubjectsModule } from './modules/subjects/subjects.module';
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://kiendao:kiendao2001@cluster0.bnqgz.mongodb.net/web-back?retryWrites=true&w=majority'),
+    MongooseModule.forRoot(
+      'mongodb+srv://kiendao:kiendao2001@cluster0.bnqgz.mongodb.net/web-back?retryWrites=true&w=majority',
+    ),
     StudentModule,
     TeacherModule,
     AuthModule,
     DepartmentModule,
     SectorModule,
-    SubjectsModule
+    SubjectsModule,
   ],
   controllers: [],
   providers: [],

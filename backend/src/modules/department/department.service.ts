@@ -8,25 +8,32 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 @Injectable()
 export class DepartmentService {
-  constructor(@InjectModel(Department.name) private department: Model<DepartmentDocument>) {}
+  constructor(
+    @InjectModel(Department.name) private department: Model<DepartmentDocument>,
+  ) {}
   async checkDepartmentLogin(@Body() loginDto: LoginDto): Promise<Department> {
     try {
-      const department = await this.department.findOne({ email: loginDto.email });
+      const department = await this.department.findOne({
+        email: loginDto.email,
+      });
       if (department) {
-        const isMatch = await bcrypt.compare(loginDto.password, department.password);
+        const isMatch = await bcrypt.compare(
+          loginDto.password,
+          department.password,
+        );
         if (isMatch) {
           return department;
         } else {
           throw new Error(`password is incorrect`);
         }
-      }else{
+      } else {
         return null;
       }
     } catch (err) {
       throw new Error(`Error finding ${err} user ${err.message}`);
     }
   }
-  async create(createDepartmentDto: CreateDepartmentDto):Promise<Department> {
+  async create(createDepartmentDto: CreateDepartmentDto): Promise<Department> {
     try {
       const department = new Department();
       const hashPassword = await bcrypt.hash(createDepartmentDto.password, 10);
@@ -45,7 +52,7 @@ export class DepartmentService {
   async findAll(): Promise<Department[]> {
     const departments = await this.department.find().exec();
     console.log(departments);
-  
+
     return departments;
   }
 

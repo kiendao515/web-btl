@@ -9,20 +9,20 @@ import { SubjectsService } from './subjects.service';
 @ApiTags('Subject')
 @Controller('subjects')
 export class SubjectsController {
-    constructor(private readonly subjectService: SubjectsService) {}
-    @ApiBearerAuth()
-    @Roles(RoleEnum.admin)
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Post('create')
-    create(@Body() createSubjectDto: CreateSubjectDto) {
-        return this.subjectService.create(createSubjectDto);
-    }
+  constructor(private readonly subjectService: SubjectsService) {}
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('create')
+  create(@Body() createSubjectDto: CreateSubjectDto) {
+    return this.subjectService.create(createSubjectDto);
+  }
 
-    @ApiBearerAuth()
-    @Roles(RoleEnum.admin)
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Get('all')
-    getAllSector(){
-        return this.subjectService.getAllSubjects();
-    }
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('all')
+  getAllSector() {
+    return this.subjectService.getAllSubjects();
+  }
 }

@@ -23,7 +23,7 @@ import { RolesGuard } from '../roles/roles.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 @Controller('student')
 export class StudentController {
-    constructor(private readonly studentService: StudentService) {}
+  constructor(private readonly studentService: StudentService) {}
 
   @ApiBearerAuth()
   @Roles(RoleEnum.admin)
@@ -33,7 +33,7 @@ export class StudentController {
     return this.studentService.createStudent(student);
   }
   @Get()
-  findAll(){
+  findAll() {
     return this.studentService.getAllStudent();
   }
 }

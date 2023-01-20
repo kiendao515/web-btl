@@ -6,9 +6,9 @@ import { SectorService } from './sector.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Sector.name, schema: SectorSchema }])
+    MongooseModule.forFeature([{ name: Sector.name, schema: SectorSchema }]),
   ],
   controllers: [SectorController],
-  providers: [SectorService]
+  providers: [SectorService],
 })
 export class SectorModule {}

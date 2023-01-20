@@ -5,13 +5,13 @@ import { Student, StudentDocument } from './student.model';
 
 @Injectable()
 export class StudentService {
-    constructor(@InjectModel(Student.name) private studentModel: Model<StudentDocument>) {}
-    createStudent(student: Student) : Promise<Student>{   
-        return this.studentModel.create(student);
-    }
-    getAllStudent(){
-        return this.studentModel.find({});
-    }
-    
-    
+  constructor(
+    @InjectModel(Student.name) private studentModel: Model<StudentDocument>,
+  ) {}
+  createStudent(student: Student): Promise<Student> {
+    return this.studentModel.create(student);
+  }
+  getAllStudent() {
+    return this.studentModel.find({});
+  }
 }

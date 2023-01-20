@@ -10,20 +10,20 @@ import { SectorService } from './sector.service';
 @ApiTags('Sector')
 @Controller('sector')
 export class SectorController {
-    constructor(private readonly sectorService: SectorService) {}
-    @ApiBearerAuth()
-    @Roles(RoleEnum.admin)
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Post('create')
-    create(@Body() createSectorDto: CreateSectorDto) {
-        return this.sectorService.create(createSectorDto);
-    }
+  constructor(private readonly sectorService: SectorService) {}
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Post('create')
+  create(@Body() createSectorDto: CreateSectorDto) {
+    return this.sectorService.create(createSectorDto);
+  }
 
-    @ApiBearerAuth()
-    @Roles(RoleEnum.admin)
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Get('all')
-    getAllSector(){
-        return this.sectorService.getAllSector();
-    }
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Get('all')
+  getAllSector() {
+    return this.sectorService.getAllSector();
+  }
 }
