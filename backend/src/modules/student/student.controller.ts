@@ -3,7 +3,8 @@ import {
   Get,
   Post,
   Body,
-  UseGuards
+  UseGuards,
+  Request
 } from '@nestjs/common';
 
 import { Roles } from '../roles/roles.decorator';
@@ -36,4 +37,18 @@ export class StudentController {
   findAll(){
     return this.studentService.getAllStudents();
   }  
+
+  @ApiBearerAuth()
+  @Get('/profile')
+  async getProfile(@Request() req) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if(!token){
+      return {
+        error: 403,
+        message:'token required'
+      }
+    }else{
+      return await this.studentService.getStudentInfo(token);
+    }
+  }
 }

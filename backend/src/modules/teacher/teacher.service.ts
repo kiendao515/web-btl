@@ -5,9 +5,13 @@ import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class TeacherService {
-  constructor(@InjectModel(Teacher.name) private teacher: Model<TeacherDocument>) {}
+  constructor(
+    @InjectModel(Teacher.name) private teacher: Model<TeacherDocument>,
+    private jwtService: JwtService
+  ) {}
   async create(createTeacherDto: CreateTeacherDto) :Promise<Teacher> {
     try {
       const teacher = new Teacher();
@@ -61,9 +65,14 @@ export class TeacherService {
     return teachers;
   }
 
-  // get profile
-  async getProfile(){
-
+  async getTeacherInfo(token:any):Promise<Teacher>{
+    const payload = this.jwtService.verify(token);
+    if (payload.role == 2) {
+      let teacher = await this.teacher.findOne({ email: payload.email })
+      if (teacher) {
+        return teacher
+      } else return null;
+    }
   }
 
 }
