@@ -1,17 +1,64 @@
-import { Injectable } from '@nestjs/common';
+import { Body, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Number } from 'mongoose';
-import { Student, StudentDocument } from './student.model';
-
+import { CreateStudentDto } from './dto/create-student.dto';
+import * as bcrypt from 'bcrypt';
+import { Student, StudentDocument } from './entities/student.entity';
+import { StudentLoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class StudentService {
   constructor(
-    @InjectModel(Student.name) private studentModel: Model<StudentDocument>,
-  ) {}
-  createStudent(student: Student): Promise<Student> {
-    return this.studentModel.create(student);
+    @InjectModel(Student.name) private student: Model<StudentDocument>,
+    private jwtService: JwtService
+  ) { }
+  async create(createStudentDto: CreateStudentDto): Promise<Student> {
+    try {
+      const s = new Student();
+      const hashPassword = await bcrypt.hash(createStudentDto.password, 10);
+      s.email = createStudentDto.email;
+      s.password = hashPassword;
+      s.name = createStudentDto.name;
+      s.studentCode = createStudentDto.studentCode;
+      s.identification = createStudentDto.identification;
+      s.userImage = createStudentDto.userImage;
+      s.age = createStudentDto.age;
+      s.sector = createStudentDto.sector;
+      s.totalOfCredit = createStudentDto.totalOfCredit;
+      return new this.student(s).save();
+    } catch (error) {
+      throw new Error(`Error create student ${error}`);
+    }
   }
-  getAllStudent() {
-    return this.studentModel.find({});
+  async getAllStudents(): Promise<any> {
+    return this.student.find({}).populate('sector');
   }
+  async getStudentInfo(token: any): Promise<Student> {
+    const payload = this.jwtService.verify(token);
+    if (payload.role == 3) {
+      let student = await this.student.findOne({ email: payload.email })
+      if (student) {
+        return student
+      } else return null;
+    }
+  }
+
+  async checkStudentLogin(@Body() loginDto: StudentLoginDto): Promise<Student> {
+    try {
+      const department = await this.student.findOne({ email: loginDto.email });
+      if (department) {
+        const isMatch = await bcrypt.compare(loginDto.password, department.password);
+        if (isMatch) {
+          return department;
+        } else {
+          throw new Error(`password is incorrect`);
+        }
+      } else {
+        return null;
+      }
+    } catch (err) {
+      throw new Error(`Error finding ${err} user ${err.message}`);
+    }
+  }
+
 }

@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete ,UseGuards, Request} from '@nestjs/common';
 import { TeacherService } from './teacher.service';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { UpdateTeacherDto } from './dto/update-teacher.dto';
@@ -38,8 +29,17 @@ export class TeacherController {
   }
 
   @ApiBearerAuth()
-  @Roles(RoleEnum.teacher)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('profile')
-  getProfile() {}
+  async getProfile(@Request() req) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if(!token){
+      return {
+        error: 403,
+        message:'token required'
+      }
+    }else{
+      return await this.teacherService.getTeacherInfo(token);
+    }
+  }
+
 }

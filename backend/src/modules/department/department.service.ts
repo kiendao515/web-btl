@@ -6,10 +6,12 @@ import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Department, DepartmentDocument } from './entities/department.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
+import { JwtService } from '@nestjs/jwt';
 @Injectable()
 export class DepartmentService {
   constructor(
     @InjectModel(Department.name) private department: Model<DepartmentDocument>,
+    private jwtService: JwtService
   ) {}
   async checkDepartmentLogin(@Body() loginDto: LoginDto): Promise<Department> {
     try {
@@ -55,12 +57,13 @@ export class DepartmentService {
 
     return departments;
   }
-
-  update(id: number, updateDepartmentDto: UpdateDepartmentDto) {
-    return `This action updates a #${id} department`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} department`;
+  async getDepartmentInfo(token:any):Promise<Department>{
+    const payload = this.jwtService.verify(token);
+    if (payload.role == 4) {
+      let d = await this.department.findOne({ email: payload.email })
+      if (d) {
+        return d
+      } else return null;
+    }
   }
 }

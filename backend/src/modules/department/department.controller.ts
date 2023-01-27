@@ -1,13 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
@@ -37,16 +28,17 @@ export class DepartmentController {
     return this.departmentService.findAll();
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateDepartmentDto: UpdateDepartmentDto,
-  ) {
-    return this.departmentService.update(+id, updateDepartmentDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.departmentService.remove(+id);
+  @ApiBearerAuth()
+  @Get('/profile')
+  async getProfile(@Request() req){
+    const token = req.headers.authorization?.split(' ')[1];
+    if(!token){
+      return {
+        error: 403,
+        message:'token required'
+      }
+    }else{
+      return await this.departmentService.getDepartmentInfo(token);
+    }
   }
 }
