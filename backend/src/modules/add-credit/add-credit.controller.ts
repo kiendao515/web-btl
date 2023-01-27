@@ -50,4 +50,18 @@ export class AddCreditController {
       };
     }else return {status:200,message:'Đơn đăng ký không tồn tại'}
   }
+
+  @ApiBearerAuth()
+  @Get('/own')
+  async getOwnAddCredit(@Request() req):Promise<any>{
+    const token = req.headers.authorization?.split(' ')[1];
+    if(!token){
+      return {
+        error: 403,
+        message:'token required'
+      }
+    }else{
+      return await this.addCreditService.getOwnAddCredit(token);
+    }
+  }
 }

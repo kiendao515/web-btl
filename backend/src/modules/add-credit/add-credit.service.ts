@@ -35,6 +35,25 @@ export class AddCreditService {
     return await this.addCredit.find({check:false});
   }
 
+  async getOwnAddCredit(token:any){
+    const payload = this.jwtService.verify(token);
+    if(payload.role==3){
+      let student = await this.student.findOne({ email: payload.email })
+      if(student){
+        return await this.addCredit.find({student:student._id}).populate({
+          path: 'subject',
+          populate: {
+            path: 'sector',
+            model: 'Sector'
+          }
+        }).populate('student').populate('course')
+      }
+    }else return {
+      status:200,
+      message:'token invalid'
+    }
+  }
+
   async acceptRegisterMoreCredit(addCredit:UpdateAddCreditDto):Promise<AddCredit>{
     let c= await this.addCredit.findOneAndUpdate({_id:addCredit.addCreditId},{check:true},{new:true});
     if(c){

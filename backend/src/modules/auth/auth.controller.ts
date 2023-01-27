@@ -1,5 +1,5 @@
-import { Controller, Post, UseGuards, Get, HttpCode, HttpStatus, Body } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Post, UseGuards, Get, HttpCode, HttpStatus, Body, Request } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '../department/dto/login.dto';
 import { StudentLoginDto } from '../student/dto/login.dto';
 import { AuthService } from './auth.service';
@@ -32,5 +32,19 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     public studentLogin(@Body() LoginDto:StudentLoginDto){
       return this.authService.checkStudentLogin(LoginDto);
+    }
+
+    @ApiBearerAuth()
+    @Get('/profile')
+    async getProfile(@Request() req) {
+    const token = req.headers.authorization?.split(' ')[1];
+    if(!token){
+      return {
+        error: 403,
+        message:'token required'
+      }
+    }else{
+      return await this.authService.getProfileInfo(token);
+    }
     }
 }

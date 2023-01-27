@@ -84,5 +84,21 @@ export class AuthService {
     return await this.teacherService.findOne(email, password);
   }
 
+  async getProfileInfo(token:any):Promise<any>{
+    const payload = this.jwtService.verify(token);
+    if(payload.role==1){
+      return {
+        name:'admin',
+        email:'admin@gmail.com',
+        age:'21',
+        from:'hà nội việt nam'
+      }
+    }else if(payload.role==2){
+      return await this.teacherService.getTeacherInfo(token);
+    }else if(payload.role==3){
+      return await this.studentService.getStudentInfo(token);
+    }else return await this.departmentService.getDepartmentInfo(token);
+  }
+
 
 }
