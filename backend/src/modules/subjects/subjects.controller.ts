@@ -19,7 +19,7 @@ export class SubjectsController {
     }
 
     @ApiBearerAuth()
-    @Roles(RoleEnum.admin)
+    @Roles(RoleEnum.student)
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Get('all')
     getAllSector(){
