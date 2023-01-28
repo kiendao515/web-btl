@@ -65,12 +65,15 @@ export class TeacherService {
     return teachers;
   }
 
-  async getTeacherInfo(token:any):Promise<Teacher>{
+  async getTeacherInfo(token:any):Promise<any>{
     const payload = this.jwtService.verify(token);
     if (payload.role == 2) {
       let teacher = await this.teacher.findOne({ email: payload.email })
       if (teacher) {
-        return teacher
+        return {
+          ...teacher.toObject(),
+          role:'teacher',
+        }
       } else return null;
     }
   }

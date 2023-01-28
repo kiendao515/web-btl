@@ -52,12 +52,15 @@ export class DepartmentService {
   
     return departments;
   }
-  async getDepartmentInfo(token:any):Promise<Department>{
+  async getDepartmentInfo(token:any):Promise<any>{
     const payload = this.jwtService.verify(token);
     if (payload.role == 4) {
       let d = await this.department.findOne({ email: payload.email })
       if (d) {
-        return d
+        return {
+          ...d.toObject(),
+          role:'department'
+        }
       } else return null;
     }
   }

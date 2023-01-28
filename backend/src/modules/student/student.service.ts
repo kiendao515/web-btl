@@ -33,12 +33,15 @@ export class StudentService {
   async getAllStudents(): Promise<any> {
     return this.student.find({}).populate('sector');
   }
-  async getStudentInfo(token: any): Promise<Student> {
+  async getStudentInfo(token: any): Promise<any> {
     const payload = this.jwtService.verify(token);
     if (payload.role == 3) {
       let student = await this.student.findOne({ email: payload.email })
       if (student) {
-        return student
+        return {
+          ...student.toObject(),
+          role:'student'
+        }
       } else return null;
     }
   }

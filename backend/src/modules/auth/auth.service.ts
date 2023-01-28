@@ -91,7 +91,8 @@ export class AuthService {
         name:'admin',
         email:'admin@gmail.com',
         age:'21',
-        from:'hà nội việt nam'
+        from:'hà nội việt nam',
+        role:'admin'
       }
     }else if(payload.role==2){
       return await this.teacherService.getTeacherInfo(token);

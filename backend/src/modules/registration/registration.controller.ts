@@ -41,9 +41,11 @@ export class RegistrationController {
         message:'token required'
       }
     }else{
-      await this.registrationService.registerCourse(token,body);
+      let rs= await this.registrationService.registerCourse(token,body);
+      console.log(rs);
       return {
-        data:"register success!"
+        status:'false',
+        data:rs
       }
     }
   }
