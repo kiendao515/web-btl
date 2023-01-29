@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Get, HttpCode, HttpStatus, Body, Request } from '@nestjs/common';
+import { Controller, Post, UseGuards, Get, HttpCode, HttpStatus, Body, Request, HttpException } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto } from '../department/dto/login.dto';
 import { StudentLoginDto } from '../student/dto/login.dto';
@@ -39,10 +39,7 @@ export class AuthController {
     async getProfile(@Request() req) {
     const token = req.headers.authorization?.split(' ')[1];
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+       throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
       return await this.authService.getProfileInfo(token);
     }
