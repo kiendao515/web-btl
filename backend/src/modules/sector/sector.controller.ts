@@ -20,7 +20,7 @@ export class SectorController {
     }
 
     @ApiBearerAuth()
-    @Roles(RoleEnum.admin)
+    @Roles(RoleEnum.admin,RoleEnum.student)
     @UseGuards(AuthGuard('jwt'), RolesGuard)
     @Get('all')
     getAllSector(){
