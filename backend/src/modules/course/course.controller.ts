@@ -22,7 +22,7 @@ export class CourseController {
   }
 
   @ApiBearerAuth()
-  @Roles(RoleEnum.student)
+  @Roles(RoleEnum.student,RoleEnum.admin)
   @UseGuards(AuthGuard('jwt'),RolesGuard)
   @Get('all')
   findAll() {
