@@ -54,13 +54,13 @@ export class StudentService {
         if (isMatch) {
           return department;
         } else {
-          throw new Error(`password is incorrect`);
+          throw new Error(`Password is incorrect`);
         }
       } else {
-        return null;
+        throw new Error(`Email not found`);;
       }
     } catch (err) {
-      throw new Error(`Error finding ${err} user ${err.message}`);
+      throw new Error(`${err.message}`);
     }
   }
 
