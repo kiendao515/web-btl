@@ -26,10 +26,7 @@ export class AuthService {
         access_token: this.jwtService.sign(payload)
       }
     } else {
-      return {
-        status: "200",
-        message: "đăng nhập thất bại"
-      }
+       throw new HttpException({ message: 'Can not login' }, HttpStatus.UNAUTHORIZED);
     }
   }
   
@@ -42,10 +39,7 @@ export class AuthService {
         access_token: this.jwtService.sign(payload)
       }
     }else{
-      return {
-        status: "200",
-        message: "đăng nhập thất bại"
-      }
+      throw new HttpException({ message: 'Can not login' }, HttpStatus.UNAUTHORIZED);
     }
   }
   async checkTeacherLogin(@Body() loginDto: LoginDto): Promise<any> {
@@ -57,10 +51,7 @@ export class AuthService {
         access_token: this.jwtService.sign(payload)
       }
     }else{
-      return {
-        status: "200",
-        message: "đăng nhập thất bại"
-      }
+      throw new HttpException({ message: 'Can not login' }, HttpStatus.UNAUTHORIZED);
     }
   }
 

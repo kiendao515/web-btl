@@ -31,7 +31,7 @@ export class StudentController {
 
 
   @ApiBearerAuth()
-  @Roles(RoleEnum.admin)
+  @Roles(RoleEnum.admin,RoleEnum.teacher,RoleEnum.department)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('/all')
   findAll(){
