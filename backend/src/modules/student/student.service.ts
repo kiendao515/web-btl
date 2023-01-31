@@ -6,6 +6,9 @@ import * as bcrypt from 'bcrypt';
 import { Student, StudentDocument } from './entities/student.entity';
 import { StudentLoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { HttpStatus } from '@nestjs/common/enums';
+import { HttpException } from '@nestjs/common/exceptions';
+import { UpdateStudentDto } from './dto/update-student.dto';
 @Injectable()
 export class StudentService {
   constructor(
@@ -57,11 +60,36 @@ export class StudentService {
           throw new Error(`Password is incorrect`);
         }
       } else {
-        throw new Error(`Email not found`);;
+        throw new Error(`Email not found`);
       }
     } catch (err) {
       throw new Error(`${err.message}`);
     }
+  }
+
+  async remove(id:string):Promise<any>{
+    let rs =await this.student.findByIdAndDelete({_id:id});
+    if(rs){
+      return rs;
+    }else throw new HttpException({ message: 'student not found' }, HttpStatus.NOT_FOUND);
+  }
+  async update(id: string, updateSectorDto: UpdateStudentDto):Promise<any>{
+    let s =await this.student.findOne({_id:id});
+    if(s){
+      let rs = await this.student.findByIdAndUpdate({_id:id},{
+        email:updateSectorDto.email,
+        name : updateSectorDto.name,
+        studentCode: updateSectorDto.studentCode,
+        identification:updateSectorDto.identification,
+        userImage:updateSectorDto.userImage,
+        age: updateSectorDto.age,
+        sector: updateSectorDto.sector,
+        totalOfCredit:updateSectorDto.totalOfCredit},{new:true})
+      console.log(rs);
+      if(rs){
+        return rs;
+      }else return "Can not update student"
+    }else throw new HttpException({ message: 'student not found' }, HttpStatus.NOT_FOUND);
   }
 
 }

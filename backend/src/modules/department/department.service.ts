@@ -7,6 +7,8 @@ import { Department, DepartmentDocument } from './entities/department.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { HttpStatus } from '@nestjs/common/enums';
+import { HttpException } from '@nestjs/common/exceptions';
 @Injectable()
 export class DepartmentService {
   constructor(
@@ -63,5 +65,28 @@ export class DepartmentService {
         }
       } else return null;
     }
+  }
+  async remove(id:string):Promise<any>{
+    let rs =await this.department.findByIdAndDelete({_id:id});
+    if(rs){
+      return rs;
+    }else throw new HttpException({ message: 'department not found' }, HttpStatus.NOT_FOUND);
+  }
+  async update(id: string, update: UpdateDepartmentDto):Promise<any>{
+    let s =await this.department.findOne({_id:id});
+    if(s){
+      const hashPassword = await bcrypt.hash(update.password, 10);
+      let rs = await this.department.findByIdAndUpdate({_id:id},{
+        email:update.email,
+        password:hashPassword,
+        name:update.name,
+        departmentIdentity:update.departmentID,
+        identification:update.identification,
+        userImage:update.userImage},{new:true})
+      console.log(rs);
+      if(rs){
+        return rs;
+      }else throw new HttpException({ message: 'can not update department' }, HttpStatus.ACCEPTED);
+    }else throw new HttpException({ message: 'department is not found' }, HttpStatus.ACCEPTED);
   }
 }

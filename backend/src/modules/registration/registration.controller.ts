@@ -3,6 +3,8 @@ import { RegistrationService } from './registration.service';
 import { CreateRegistrationDto } from './dto/create-registration.dto';
 import { UpdateRegistrationDto } from './dto/update-registration.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { HttpException } from '@nestjs/common/exceptions';
+import { HttpStatus } from '@nestjs/common/enums';
 
 @ApiTags('Registration')
 @Controller('registration')
@@ -21,10 +23,7 @@ export class RegistrationController {
   getStudentCourse(@Request() req){
     const token = req.headers.authorization?.split(' ')[1];
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+      throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
       return this.registrationService.getCurrentStudentCourse(token);
     }
@@ -36,15 +35,11 @@ export class RegistrationController {
     const token = req.headers.authorization?.split(' ')[1];
     const body = req.body;
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+      throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
       let rs= await this.registrationService.registerCourse(token,body);
       console.log(rs);
       return {
-        status:'false',
         data:rs
       }
     }

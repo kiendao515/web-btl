@@ -10,7 +10,7 @@ import { UpdateDepartmentDto } from './dto/update-department.dto';
 @ApiTags('Department')
 @Controller('department')
 export class DepartmentController {
-  constructor(private readonly departmentService: DepartmentService) {}
+  constructor(private readonly departmentService: DepartmentService) { }
 
   @ApiBearerAuth()
   @Roles(RoleEnum.admin)
@@ -22,7 +22,7 @@ export class DepartmentController {
 
   @ApiBearerAuth()
   @Roles(RoleEnum.admin)
-  @UseGuards(AuthGuard('jwt'),RolesGuard)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get('all')
   findAll() {
     return this.departmentService.findAll();
@@ -30,15 +30,40 @@ export class DepartmentController {
 
   @ApiBearerAuth()
   @Get('/profile')
-  async getProfile(@Request() req){
+  async getProfile(@Request() req) {
     const token = req.headers.authorization?.split(' ')[1];
-    if(!token){
+    if (!token) {
       return {
         error: 403,
-        message:'token required'
+        message: 'token required'
       }
-    }else{
+    } else {
       return await this.departmentService.getDepartmentInfo(token);
     }
+  }
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    let rs = await this.departmentService.remove(id);
+    console.log(rs);
+    return {
+      status: "deleted",
+      data: rs
+    }
+
+  }
+
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateCourseDto: UpdateDepartmentDto) {
+    let rs = await this.departmentService.update(id, updateCourseDto);
+    console.log(rs);
+    return {
+      data: rs
+    };
   }
 }

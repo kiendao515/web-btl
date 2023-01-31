@@ -41,5 +41,30 @@ export class TeacherController {
       return await this.teacherService.getTeacherInfo(token);
     }
   }
+  @ApiBearerAuth()
+    @Roles(RoleEnum.admin)
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Delete(':id')
+    async remove(@Param('id') id: string) {
+        let rs=  await this.teacherService.remove(id);
+        console.log(rs);
+        return {
+            status:"deleted",
+            data:rs
+        }
+        
+    }
+
+    @ApiBearerAuth()
+    @Roles(RoleEnum.admin)
+    @UseGuards(AuthGuard('jwt'), RolesGuard)
+    @Patch(':id')
+    async update(@Param('id') id: string, @Body() updateSectorDto: UpdateTeacherDto) {
+        let rs=  await this.teacherService.update(id,updateSectorDto);
+        console.log(rs);
+        return {
+            data:rs
+        }; 
+    }
 
 }

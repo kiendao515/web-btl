@@ -58,16 +58,16 @@ export class RegistrationService {
                   }
                 })
               } else {
-                return "This is not the time for registering"
+                throw new HttpException({ message: 'this is not the time for registering' }, HttpStatus.BAD_REQUEST);
               }
-            } else return "Over 24 credits"
+            } else throw new HttpException({ message: 'over 24 credits' }, HttpStatus.BAD_REQUEST);
           }
         }else{
           throw new HttpException({ message: 'Invalid course id' }, HttpStatus.BAD_REQUEST);
         }
       } else return "Token exprised"
     } else {
-      return "User is not student"
+       throw new HttpException({ message: 'Invalid token' }, HttpStatus.UNAUTHORIZED);
     }
   }
 
@@ -78,9 +78,9 @@ export class RegistrationService {
       if (student) {
         console.log(student);
         return await this.registration.findOne({ student: student._id }).populate('student').populate('course').populate('subject');
-      } else return "Token exprised"
+      } else  throw new HttpException({ message: 'user is not a student' }, HttpStatus.UNAUTHORIZED);
     } else {
-      return "User is not student"
+      throw new HttpException({ message: 'Invalid token' }, HttpStatus.UNAUTHORIZED);
     }
   }
 

@@ -1,4 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common/enums';
+import { HttpException } from '@nestjs/common/exceptions';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
@@ -19,12 +21,12 @@ export class AddCreditController {
     const token = req.headers.authorization?.split(' ')[1];
     const body = req.body;
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+      throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
-      return await this.addCreditService.create(token,body);
+      let rs =await this.addCreditService.create(token,body);
+      return {
+        data:rs
+      }
     }
   }
 
@@ -43,12 +45,9 @@ export class AddCreditController {
   @Post('/check')
   async acceptRegisterMoreCredit(@Body() update :UpdateAddCreditDto){
     let c= await this.addCreditService.acceptRegisterMoreCredit(update);
-    if(c!=null){
-      return {
-        status:200,
-        data:c
-      };
-    }else return {status:200,message:'Đơn đăng ký không tồn tại'}
+    return {
+      data:c
+    }
   }
 
   @ApiBearerAuth()
@@ -56,12 +55,12 @@ export class AddCreditController {
   async getOwnAddCredit(@Request() req):Promise<any>{
     const token = req.headers.authorization?.split(' ')[1];
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+      throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
-      return await this.addCreditService.getOwnAddCredit(token);
+      let rs= await this.addCreditService.getOwnAddCredit(token);
+      return {
+        data:rs
+      }
     }
   }
 }

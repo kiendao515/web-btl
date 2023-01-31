@@ -6,6 +6,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { LoginDto } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { UpdateTeacherDto } from './dto/update-teacher.dto';
 @Injectable()
 export class TeacherService {
   constructor(
@@ -76,6 +77,30 @@ export class TeacherService {
         }
       } else return null;
     }
+  }
+
+  async remove(id:string):Promise<any>{
+    let rs =await this.teacher.findByIdAndDelete({_id:id});
+    if(rs){
+      return rs;
+    }else throw new HttpException({ message: 'teacher not found' }, HttpStatus.NOT_FOUND);
+  }
+  async update(id: string, update: UpdateTeacherDto):Promise<any>{
+    let s =await this.teacher.findOne({_id:id});
+    if(s){
+      const hashPassword = await bcrypt.hash(update.password, 10);
+      let rs = await this.teacher.findByIdAndUpdate({_id:id},{
+        email:update.email,
+        password:hashPassword,
+        name:update.name,
+        teacherIdentity:update.teacherID,
+        identification:update.identification,
+        userImage:update.userImage},{new:true})
+      console.log(rs);
+      if(rs){
+        return rs;
+      }else throw new HttpException({ message: 'can not update student' }, HttpStatus.ACCEPTED);
+    }else throw new HttpException({ message: 'teacher not found' }, HttpStatus.NOT_FOUND);
   }
 
 }

@@ -4,7 +4,10 @@ import {
   Post,
   Body,
   UseGuards,
-  Request
+  Request,
+  Delete,
+  Param,
+  Patch
 } from '@nestjs/common';
 
 import { Roles } from '../roles/roles.decorator';
@@ -15,6 +18,7 @@ import { RolesGuard } from '../roles/roles.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Student } from './entities/student.entity';
 import { CreateStudentDto } from './dto/create-student.dto';
+import { UpdateStudentDto } from './dto/update-student.dto';
 
 @ApiTags('Student')
 @Controller('student')
@@ -50,5 +54,31 @@ export class StudentController {
     }else{
       return await this.studentService.getStudentInfo(token);
     }
+  }
+
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+      let rs=  await this.studentService.remove(id);
+      console.log(rs);
+      return {
+          status:"deleted",
+          data:rs
+      }
+      
+  }
+
+  @ApiBearerAuth()
+  @Roles(RoleEnum.admin)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateSectorDto: UpdateStudentDto) {
+      let rs=  await this.studentService.update(id,updateSectorDto);
+      console.log(rs);
+      return {
+          data:rs
+      }; 
   }
 }
