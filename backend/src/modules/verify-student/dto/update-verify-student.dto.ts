@@ -5,4 +5,7 @@ import { CreateVerifyStudentDto } from './create-verify-student.dto';
 export class UpdateVerifyStudentDto {
     @ApiProperty({type: String,required:true,example:'63cabdee7bc8183573039f3b'})
     verifyStudentId : string;
+
+    @ApiProperty({type: String,required:true,example:"false"})
+    status:string 
 }

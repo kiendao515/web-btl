@@ -15,15 +15,15 @@ export class AddCreditService {
     @InjectModel(AddCredit.name) private addCredit: Model<AddCreditDocument>,
     @InjectModel(Registration.name) private registration: Model<RegistrationDocument>,
     private jwtService: JwtService,
-  ){}
-  async create(token:any,createAddCreditDto: CreateAddCreditDto) {
+  ) { }
+  async create(token: any, createAddCreditDto: CreateAddCreditDto) {
     const payload = this.jwtService.verify(token);
     if (payload.role == 3) {
       let student = await this.student.findOne({ email: payload.email })
-      if(student){
-        let c= new AddCredit();
-        c.subject= createAddCreditDto.subject;
-        c.course= createAddCreditDto.course;
+      if (student) {
+        let c = new AddCredit();
+        c.subject = createAddCreditDto.subject;
+        c.course = createAddCreditDto.course;
         c.student = student;
         c.reason = createAddCreditDto.reason;
         return new this.addCredit(c).save();
@@ -32,15 +32,15 @@ export class AddCreditService {
   }
 
   async findAll() {
-    return await this.addCredit.find({check:false});
+    return await this.addCredit.find({ check: "pending" });
   }
 
-  async getOwnAddCredit(token:any){
+  async getOwnAddCredit(token: any) {
     const payload = this.jwtService.verify(token);
-    if(payload.role==3){
+    if (payload.role == 3) {
       let student = await this.student.findOne({ email: payload.email })
-      if(student){
-        return await this.addCredit.find({student:student._id}).populate({
+      if (student) {
+        return await this.addCredit.find({ student: student._id }).populate({
           path: 'subject',
           populate: {
             path: 'sector',
@@ -48,18 +48,28 @@ export class AddCreditService {
           }
         }).populate('student').populate('course')
       }
-    }else return {
-      status:200,
-      message:'token invalid'
+    } else return {
+      status: 200,
+      message: 'token invalid'
     }
   }
 
-  async acceptRegisterMoreCredit(addCredit:UpdateAddCreditDto):Promise<AddCredit>{
-    let c= await this.addCredit.findOneAndUpdate({_id:addCredit.addCreditId},{check:true},{new:true});
-    if(c){
-      await this.registration.findOneAndUpdate({student:c.student,course:c.course},{subject:c.subject},{new:true})
-      return c;
-    }else return null;
+  async acceptRegisterMoreCredit(addCredit: UpdateAddCreditDto): Promise<any> {
+    if (addCredit.status == "true") {
+      let c = await this.addCredit.findOneAndUpdate({ _id: addCredit.addCreditId }, { check: addCredit.status }, { new: true });
+      if (c) {
+        await this.registration.findOneAndUpdate({ student: c.student, course: c.course }, { subject: c.subject }, { new: true })
+        return c;
+      } else return "Registration form is not found";
+    } else if(addCredit.status=="false"){
+      let c = await this.addCredit.findOneAndUpdate({ _id: addCredit.addCreditId }, { check: addCredit.status }, { new: true });
+      if (c) {
+        return c;
+      } else return "Registration form is not found";
+    }
+    else {
+      return "Invalid status field"
+    }
   }
 
   findOne(id: number) {
