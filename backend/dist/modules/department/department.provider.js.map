@@ -1,1 +1,0 @@
-{"version":3,"file":"department.provider.js","sourceRoot":"","sources":["../../../src/modules/department/department.provider.ts"],"names":[],"mappings":";;;AACA,oEAA+D;AAElD,QAAA,aAAa,GAAG;IAC3B;QACE,OAAO,EAAE,YAAY;QACrB,UAAU,EAAE,CAAC,QAAkB,EAAE,EAAE,CAAC,QAAQ,CAAC,KAAK,CAAC,KAAK,EAAE,oCAAgB,CAAC;QAC3E,MAAM,EAAE,CAAC,qBAAqB,CAAC;KAChC;CACF,CAAC"}
