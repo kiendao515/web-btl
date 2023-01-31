@@ -10,6 +10,8 @@ import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { StudentService } from '../student/student.service';
 import { RegistrationService } from '../registration/registration.service';
 import { Subject, SubjectSchema } from '../subjects/entities/subjects.entity';
+import { CourseService } from '../course/course.service';
+import { Course, CourseSchema } from '../course/entities/course.entity';
 
 @Module({
   imports: [
@@ -17,12 +19,13 @@ import { Subject, SubjectSchema } from '../subjects/entities/subjects.entity';
     MongooseModule.forFeature([{ name: Student.name, schema: StudentSchema }]),
     MongooseModule.forFeature([{ name: Registration.name, schema: RegistrationSchema }]),
     MongooseModule.forFeature([{ name: Subject.name, schema: SubjectSchema }]),
+    MongooseModule.forFeature([{ name: Course.name, schema: CourseSchema }]),
     JwtModule.register({
       secret: "kiendao2001",
       signOptions: { expiresIn: '10h' },
     }),
   ],
   controllers: [CancelCreditController],
-  providers: [CancelCreditService,JwtStrategy,StudentService,RegistrationService]
+  providers: [CancelCreditService,JwtStrategy,StudentService,RegistrationService,CourseService]
 })
 export class CancelCreditModule {}
