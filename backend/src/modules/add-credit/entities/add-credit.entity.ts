@@ -31,10 +31,10 @@ export class AddCredit {
     reason: string
 
     @Prop({
-        type:Boolean,
+        type:String,
         required:true,
-        default:false
+        default:"pending"
     })
-    check:boolean
+    check: string 
 }
 export const AddCreditSchema = SchemaFactory.createForClass(AddCredit);

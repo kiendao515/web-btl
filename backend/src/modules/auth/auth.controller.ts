@@ -12,13 +12,15 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
     @Post('admin/login')
     @HttpCode(HttpStatus.OK)
-    public adminLogin(@Body() LoginRequestDTO: LoginRequestDTO) {
-      return this.authService.checkAdminLogin(LoginRequestDTO);
+    async adminLogin(@Body() LoginRequestDTO: LoginRequestDTO) {
+      let rs= await this.authService.checkAdminLogin(LoginRequestDTO);
+      console.log(rs);
+      return rs;
     }
   
     @Post('teacher/login')
     @HttpCode(HttpStatus.OK)
-    public teacherLogin(@Body() LoginDto:LoginDto) {
+    async teacherLogin(@Body() LoginDto:LoginDto) {
         return this.authService.checkTeacherLogin(LoginDto);
     }
 

@@ -23,4 +23,21 @@ export class CourseService {
   findOne(id: number) {
     return `This action returns a #${id} course`;
   }
+  async remove(id:string):Promise<any>{
+    let rs =await this.course.findByIdAndDelete({_id:id});
+    if(rs){
+      return rs;
+    }else return "Sector is not found";
+  }
+  async update(id: string, updateCourseDto: UpdateCourseDto):Promise<any>{
+    let s =await this.course.findOne({_id:id});
+    if(s){
+      let rs = await this.course.findByIdAndUpdate({_id:id},{semeter:updateCourseDto.semester,startDate:updateCourseDto.startDate,
+      closeDate:updateCourseDto.closeDate},{new:true})
+      console.log(rs);
+      if(rs){
+        return rs;
+      }else return "can not update course"
+    }else return "course is not found"
+  }
 }

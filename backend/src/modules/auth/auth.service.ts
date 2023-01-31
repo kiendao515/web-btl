@@ -16,8 +16,8 @@ export class AuthService {
   constructor(
     private jwtService: JwtService,
     private teacherService: TeacherService,
-    private departmentService:DepartmentService,
-    private studentService:StudentService
+    private departmentService: DepartmentService,
+    private studentService: StudentService
   ) { }
   async checkAdminLogin(@Body() LoginRequestDTO: LoginRequestDTO): Promise<any> {
     if (LoginRequestDTO.email == "admin@gmail.com" && LoginRequestDTO.password == "admin") {
@@ -26,57 +26,57 @@ export class AuthService {
         access_token: this.jwtService.sign(payload)
       }
     } else {
-      return {
-        status: "200",
-        message: "đăng nhập thất bại"
-      }
+      throw new HttpException({ message: 'Can not login' }, HttpStatus.UNAUTHORIZED);
     }
   }
-  
+
   async checkDepartmentLogin(@Body() loginDto: LoginDto): Promise<any> {
-    let department = await this.departmentService.checkDepartmentLogin(loginDto);
-    if(department){
-      const payload ={email:department.email,role:RoleEnum.department}
-      return {
-        department:department,
-        access_token: this.jwtService.sign(payload)
+    try {
+      let department = await this.departmentService.checkDepartmentLogin(loginDto);
+      if (department) {
+        const payload = { email: department.email, role: RoleEnum.department }
+        return {
+          department: department,
+          access_token: this.jwtService.sign(payload)
+        }
+      } else {
+        throw new HttpException({ message: 'Can not login' }, HttpStatus.UNAUTHORIZED);
       }
-    }else{
-      return {
-        status: "200",
-        message: "đăng nhập thất bại"
-      }
+    } catch (error) {
+      throw new HttpException({ message: error.message }, HttpStatus.UNAUTHORIZED);
     }
   }
   async checkTeacherLogin(@Body() loginDto: LoginDto): Promise<any> {
-    let teacher = await this.teacherService.checkTeacherLogin(loginDto);
-    if(teacher){
-      const payload ={email:teacher.email,role:RoleEnum.teacher}
-      return {
-        teacher:teacher,
-        access_token: this.jwtService.sign(payload)
+    try {
+      let teacher = await this.teacherService.checkTeacherLogin(loginDto);
+      if (teacher) {
+        const payload = { email: teacher.email, role: RoleEnum.teacher }
+        return {
+          teacher: teacher,
+          access_token: this.jwtService.sign(payload)
+        }
+      } else {
+        throw new HttpException({ message: 'Can not login' }, HttpStatus.UNAUTHORIZED);
       }
-    }else{
-      return {
-        status: "200",
-        message: "đăng nhập thất bại"
-      }
+    } catch (error) {
+      throw new HttpException({ message: error.message }, HttpStatus.UNAUTHORIZED);
     }
   }
 
   async checkStudentLogin(@Body() loginDto: StudentLoginDto): Promise<any> {
-    let s = await this.studentService.checkStudentLogin(loginDto);
-    if(s){
-      const payload ={email:s.email,role:RoleEnum.student}
-      return {
-        student:s,
-        access_token: this.jwtService.sign(payload)
+    try {
+      let s = await this.studentService.checkStudentLogin(loginDto);
+      if (s) {
+        const payload = { email: s.email, role: RoleEnum.student }
+        return {
+          student: s,
+          access_token: this.jwtService.sign(payload)
+        }
+      } else {
+        throw new HttpException({ message: 'Can not login' }, HttpStatus.UNAUTHORIZED);
       }
-    }else{
-      return {
-        status: "200",
-        message: "đăng nhập thất bại"
-      }
+    } catch (error) {
+      throw new HttpException({ message: error.message }, HttpStatus.UNAUTHORIZED);
     }
   }
 
@@ -84,21 +84,21 @@ export class AuthService {
     return await this.teacherService.findOne(email, password);
   }
 
-  async getProfileInfo(token:any):Promise<any>{
+  async getProfileInfo(token: any): Promise<any> {
     const payload = this.jwtService.verify(token);
-    if(payload.role==1){
+    if (payload.role == 1) {
       return {
-        name:'admin',
-        email:'admin@gmail.com',
-        age:'21',
-        from:'hà nội việt nam',
-        role:'admin'
+        name: 'admin',
+        email: 'admin@gmail.com',
+        age: '21',
+        from: 'hà nội việt nam',
+        role: 'admin'
       }
-    }else if(payload.role==2){
+    } else if (payload.role == 2) {
       return await this.teacherService.getTeacherInfo(token);
-    }else if(payload.role==3){
+    } else if (payload.role == 3) {
       return await this.studentService.getStudentInfo(token);
-    }else return await this.departmentService.getDepartmentInfo(token);
+    } else return await this.departmentService.getDepartmentInfo(token);
   }
 
 

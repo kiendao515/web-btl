@@ -1,4 +1,4 @@
-import { Body, Injectable } from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
 import { Teacher, TeacherDocument } from './entities/teacher.entity';
 import * as bcrypt from 'bcrypt';
@@ -42,7 +42,7 @@ export class TeacherService {
       throw new Error(`Error finding ${err} user ${err.message}`);
     }
   }
-  async checkTeacherLogin(@Body() loginDto: LoginDto): Promise<Teacher> {
+  async checkTeacherLogin(@Body() loginDto: LoginDto): Promise<any> {
     try {
       const t = await this.teacher.findOne({ email: loginDto.email });
       if (t) {
@@ -50,13 +50,13 @@ export class TeacherService {
         if (isMatch) {
           return t;
         } else {
-          throw new Error(`password is incorrect`);
+          throw new Error(`Password is incorrect`);
         }
       }else{
-        return null;
+        throw new HttpException({ message: 'Email not found' }, HttpStatus.UNAUTHORIZED);
       }
     } catch (err) {
-      throw new Error(`Error finding ${err} user ${err.message}`);
+      throw new Error(`${err.message}`);
     }
   }
 

@@ -29,15 +29,19 @@ export class VerifyStudentService {
     }
   }
 
-  async verifyValidStudent(update :UpdateVerifyStudentDto):Promise<VerifyStudent>{
-    let c = await this.verifyStudent.findOneAndUpdate({_id:update.verifyStudentId},{check:true},{new:true});
-    if(c){
-      return c;
-    }else return null;
+  async verifyValidStudent(update :UpdateVerifyStudentDto):Promise<any>{
+    if(update.status=="true" || update.status=="false"){
+      let c = await this.verifyStudent.findOneAndUpdate({_id:update.verifyStudentId},{check:update.status},{new:true});
+      if(c){
+        return c;
+      }else return "Registration verify student form is not found";
+    }else {
+      return "status attribute can be true or false"
+    }
   }
 
   async findAll() {
-    return await this.verifyStudent.find({check:false});
+    return await this.verifyStudent.find({check:"pending"});
   }
 
   async checkMyRequest(token:any):Promise<VerifyStudent>{

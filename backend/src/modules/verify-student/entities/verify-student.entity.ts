@@ -21,11 +21,11 @@ export class VerifyStudent {
     birthCertificateImage: string;
 
     @Prop({
-        type:Boolean,
-        required:true,
-        default:false
+        type:String,
+        default:"pending",
+        required:true
     })
-    check:boolean
+    check:String
 
 }
 export const VerifyStudentSchema = SchemaFactory.createForClass(VerifyStudent);
