@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
 import { VerifyStudentService } from './verify-student.service';
 import { CreateVerifyStudentDto } from './dto/create-verify-student.dto';
 import { UpdateVerifyStudentDto } from './dto/update-verify-student.dto';
@@ -19,10 +19,7 @@ export class VerifyStudentController {
     const token = req.headers.authorization?.split(' ')[1];
     const body = req.body;
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+      throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
       return await this.verifyStudentService.create(token,body);
     }
@@ -36,10 +33,9 @@ export class VerifyStudentController {
     let c= await this.verifyStudentService.verifyValidStudent(update);
     if(c!=null){
       return {
-        status:200,
         data:c
       };
-    }else return {status:200,message:'Đơn đăng ký phê duyệt sinh viên không tồn tại'}
+    }
   }
 
   @ApiBearerAuth()
@@ -55,12 +51,12 @@ export class VerifyStudentController {
   async findOne(@Request() req) {
     const token = req.headers.authorization?.split(' ')[1];
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+       throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
-      return await this.verifyStudentService.checkMyRequest(token);
+      let rs= await this.verifyStudentService.checkMyRequest(token);
+      return {
+        data:rs
+      }
     }
   }
 

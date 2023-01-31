@@ -31,9 +31,9 @@ export class CancelCredit {
     reason: string
 
     @Prop({
-        type:Boolean,
+        type:String,
         required:true,
-        default:false
+        default:"pending"
     })
     check:boolean
 }

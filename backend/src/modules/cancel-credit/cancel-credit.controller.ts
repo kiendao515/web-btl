@@ -1,4 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Request, UseGuards } from '@nestjs/common';
+import { HttpStatus } from '@nestjs/common/enums';
+import { HttpException } from '@nestjs/common/exceptions';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from '../roles/roles.decorator';
@@ -19,15 +21,18 @@ export class CancelCreditController {
     const token = req.headers.authorization?.split(' ')[1];
     const body = req.body;
     if(!token){
-      return {
-        error: 403,
-        message:'token required'
-      }
+      throw new HttpException({ message: 'Access Forbidden' }, HttpStatus.FORBIDDEN);
     }else{
-      return await this.cancelCreditService.create(token,body);
+      let rs= await this.cancelCreditService.create(token,body);
+      return {
+        data:rs
+      }
     }
   }
 
+  @ApiBearerAuth()
+  @Roles(RoleEnum.teacher)
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Get()
   findAll() {
     return this.cancelCreditService.findAll();
@@ -41,10 +46,9 @@ export class CancelCreditController {
     let c= await this.cancelCreditService.verifyCancelCredit(update);
     if(c!=null){
       return {
-        status:200,
         data:c
       };
-    }else return {status:200,message:'Đơn đăng ký không tồn tại'}
+    }
   }
 
   @Get(':id')
