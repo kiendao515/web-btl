@@ -12,6 +12,7 @@ import { RegistrationModule } from './modules/registration/registration.module';
 import { AddCreditModule } from './modules/add-credit/add-credit.module';
 import { CancelCreditModule } from './modules/cancel-credit/cancel-credit.module';
 import { VerifyStudentModule } from './modules/verify-student/verify-student.module';
+import { RegisterCardModule } from './modules/register-card/register-card.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb+srv://kiendao:kiendao2001@cluster0.bnqgz.mongodb.net/web-back?retryWrites=true&w=majority'),
@@ -25,7 +26,8 @@ import { VerifyStudentModule } from './modules/verify-student/verify-student.mod
     RegistrationModule,
     AddCreditModule,
     CancelCreditModule,
-    VerifyStudentModule
+    VerifyStudentModule,
+    RegisterCardModule
   ],
   controllers: [],
   providers: [],

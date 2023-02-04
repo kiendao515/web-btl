@@ -7,7 +7,7 @@ export class CreateRegistrationDto {
     @ApiProperty({ type: Subject, isArray: true, required: true,example:['63bfd31db7fa1716a9ab5ba0','63bfd60c9f015b2c3d39abf1'] })
     subject: Subject[];
 
-    @ApiProperty({type: Course,required:true,example:'63c2f036519beb6869bcee95'})
+    @ApiProperty({type: Course,required:true,example:'63d94700404e32adf3c5df14'})
     course:Course;
 
 }
