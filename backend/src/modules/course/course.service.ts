@@ -32,7 +32,7 @@ export class CourseService {
   async update(id: string, updateCourseDto: UpdateCourseDto):Promise<any>{
     let s =await this.course.findOne({_id:id});
     if(s){
-      let rs = await this.course.findByIdAndUpdate({_id:id},{semeter:updateCourseDto.semester,startDate:updateCourseDto.startDate,
+      let rs = await this.course.findByIdAndUpdate({_id:id},{semester:updateCourseDto.semester,startDate:updateCourseDto.startDate,
       closeDate:updateCourseDto.closeDate},{new:true})
       console.log(rs);
       if(rs){
